@@ -1,0 +1,25 @@
+
+namespace PAS.Web.ModelsConfiguration
+{
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Metadata.Builders;
+    using PAS.Web.Data.Entities;
+    public class IdentificationTypeConfiguration : IEntityTypeConfiguration<IdentificationType>
+    {
+        //public IdentificationTypeConfiguration()
+        //{
+        //    HasKey(t => t.IdentificationTypeId);
+
+        //    Property(t => t.Name)
+        //        .IsRequired()
+        //        .HasMaxLength(16)
+        //        .HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute("IX_Name")));
+        //}
+        public void Configure(EntityTypeBuilder<IdentificationType> builder)
+        {
+            builder.HasKey(t => t.IdentificationTypeId);
+
+
+        }
+    }
+}

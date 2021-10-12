@@ -1,0 +1,3 @@
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=AMREYESBATISTA\\SQLEXPRESS;Database=PAS;Trusted_Connection=True;MultipleActiveResultSets=true"
+  },

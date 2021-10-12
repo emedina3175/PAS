@@ -1,0 +1,89 @@
+﻿@model IEnumerable<PAS.Web.Data.Entities.Company>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.IdentificationNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BusinessName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImageUrl)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.FoundationDate)
+            </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.OfficeNumber)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.FaxNumber)
+            </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.EmailAddress)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>*@
+            @*<th>
+                @Html.DisplayNameFor(model => model.IsEnabled)
+            </th>*@
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdentificationNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BusinessName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ImageUrl)
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.FoundationDate)
+            </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.OfficeNumber)
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.FaxNumber)
+            </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.EmailAddress)
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>*@
+            @*<td>
+                @Html.DisplayFor(modelItem => item.IsEnabled)
+            </td>*@
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.CompanyId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.CompanyId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.CompanyId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
