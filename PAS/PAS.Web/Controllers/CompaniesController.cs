@@ -12,29 +12,28 @@ namespace PAS.Web.Controllers
 {
     public class CompaniesController : Controller
     {
-        private readonly DataContext _context;
+        private readonly IRepository repository;
 
-        public CompaniesController(DataContext context)
+        public CompaniesController(IRepository repository)
         {
-            _context = context;
+            this.repository = repository;
         }
 
         // GET: Companies
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Companies.ToListAsync());
+            return View(this.repository.GetCompanies());
         }
 
         // GET: Companies/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var company = await _context.Companies
-                .FirstOrDefaultAsync(m => m.CompanyId == id);
+            var company = this.repository.GetCompany(id.Value);
             if (company == null)
             {
                 return NotFound();
@@ -54,26 +53,26 @@ namespace PAS.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CompanyId,IdentificationNumber,Name,BusinessName,ImageUrl,FoundationDate,OfficeNumber,FaxNumber,EmailAddress,Description,IsEnabled")] Company company)
+        public async Task<IActionResult> Create(Company company)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(company);
-                await _context.SaveChangesAsync();
+                this.repository.AddCompany(company);
+                await this.repository.SaveAllAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(company);
         }
 
         // GET: Companies/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var company = await _context.Companies.FindAsync(id);
+            var company = this.repository.GetCompany(id.Value);
             if (company == null)
             {
                 return NotFound();
@@ -86,7 +85,7 @@ namespace PAS.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CompanyId,IdentificationNumber,Name,BusinessName,ImageUrl,FoundationDate,OfficeNumber,FaxNumber,EmailAddress,Description,IsEnabled")] Company company)
+        public async Task<IActionResult> Edit(int id, Company company)
         {
             if (id != company.CompanyId)
             {
@@ -97,12 +96,12 @@ namespace PAS.Web.Controllers
             {
                 try
                 {
-                    _context.Update(company);
-                    await _context.SaveChangesAsync();
+                    this.repository.UpdateCompany(company);
+                    await this.repository.SaveAllAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CompanyExists(company.CompanyId))
+                    if (!this.repository.CompanyExists(company.CompanyId))
                     {
                         return NotFound();
                     }
@@ -117,20 +116,17 @@ namespace PAS.Web.Controllers
         }
 
         // GET: Companies/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-
-            var company = await _context.Companies
-                .FirstOrDefaultAsync(m => m.CompanyId == id);
+            var company = this.repository.GetCompany(id.Value);
             if (company == null)
             {
                 return NotFound();
             }
-
             return View(company);
         }
 
@@ -139,15 +135,10 @@ namespace PAS.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var company = await _context.Companies.FindAsync(id);
-            _context.Companies.Remove(company);
-            await _context.SaveChangesAsync();
+            var company = this.repository.GetCompany(id);
+            this.repository.RemoveCompany(company);
+            await this.repository.SaveAllAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool CompanyExists(int id)
-        {
-            return _context.Companies.Any(e => e.CompanyId == id);
         }
     }
 }
