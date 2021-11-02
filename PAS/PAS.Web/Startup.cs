@@ -13,6 +13,9 @@ namespace PAS.Web
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using PAS.Web.Data.Entities;
+    using Microsoft.AspNetCore.Identity;
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -28,6 +31,18 @@ namespace PAS.Web
             services.AddDbContext<DataContext>(cfg => {
                 cfg.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            services.AddIdentity<User, IdentityRole>(cfg =>
+            {
+                cfg.User.RequireUniqueEmail = true;
+                cfg.Password.RequireDigit = false;
+                cfg.Password.RequiredUniqueChars = 0;
+                cfg.Password.RequireLowercase = false;
+                cfg.Password.RequireNonAlphanumeric = false;
+                cfg.Password.RequireUppercase = false;
+                cfg.Password.RequiredLength = 6;
+
+            }).AddEntityFrameworkStores<DataContext>();
 
             services.AddTransient<SeedDb>();
             services.AddScoped<IRepository, Repository>();
@@ -50,6 +65,7 @@ namespace PAS.Web
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseAuthentication();
 
             app.UseRouting();
 
